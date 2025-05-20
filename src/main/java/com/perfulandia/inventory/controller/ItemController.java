@@ -6,9 +6,7 @@ import com.perfulandia.inventory.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,5 +25,49 @@ public class ItemController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(items);
+    }
+
+    @PostMapping
+    public ResponseEntity<Item> guardar(@RequestBody Item item) {
+        Item itemNuevo = itemService.save(item);
+        return ResponseEntity.status(HttpStatus.CREATED).body(itemNuevo);
+    //  return new ResponseEntity<>(itemNuevo, HtppStatus.ACCEPTED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Item> buscar(@PathVariable Integer id) {
+        try {
+            Item item = itemService.findById(id);
+            return ResponseEntity.ok(item);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Item> actualizar(@PathVariable Integer id, @RequestBody Item item) {
+        try{
+            Item it = itemService.findById(id);
+            it.setId(id);
+            it.setNombre(item.getNombre());
+            it.setPrecio(item.getPrecio());
+
+
+            itemService.save(it);
+            return ResponseEntity.ok(item);
+
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+        try {
+            itemService.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
