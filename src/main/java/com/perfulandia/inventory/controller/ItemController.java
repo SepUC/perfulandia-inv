@@ -23,6 +23,7 @@ public class ItemController {
         List<Item> items = itemService.findAll();
         if (items.isEmpty()) {
             return ResponseEntity.noContent().build();
+
         }
         return ResponseEntity.ok(items);
     }
