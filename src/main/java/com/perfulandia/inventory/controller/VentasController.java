@@ -1,8 +1,8 @@
-package com.perfulandia.ventas.controller;
+package com.perfulandia.inventory.controller;
 
 
-import com.perfulandia.ventas.model.Venta;
-import com.perfulandia.ventas.service.VentaService;
+import com.perfulandia.inventory.model.Venta;
+import com.perfulandia.inventory.service.VentaService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;

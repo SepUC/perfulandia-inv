@@ -1,7 +1,7 @@
-package com.perfulandia.Distribuidores.controller;
+package com.perfulandia.inventory.controller;
 
-import com.perfulandia.Distribuidores.Model.Distribuidor;
-import com.perfulandia.Distribuidores.Service.DistribuidorService;
+import com.perfulandia.inventory.model.Distribuidor;
+import com.perfulandia.inventory.service.DistribuidorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

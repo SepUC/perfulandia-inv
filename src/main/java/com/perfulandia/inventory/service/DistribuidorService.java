@@ -1,7 +1,7 @@
-package com.perfulandia.Distribuidores.Service;
+package com.perfulandia.inventory.service;
 
-import com.perfulandia.Distribuidores.Model.Distribuidor;
-import com.perfulandia.Distribuidores.repository.DistribuidorRepository;
+import com.perfulandia.inventory.model.Distribuidor;
+import com.perfulandia.inventory.repository.DistribuidorRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

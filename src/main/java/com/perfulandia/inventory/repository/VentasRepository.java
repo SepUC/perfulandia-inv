@@ -1,8 +1,8 @@
-package com.perfulandia.ventas.repository;
+package com.perfulandia.inventory.repository;
 
 import java.util.List;
 
-import com.perfulandia.ventas.model.Venta;
+import com.perfulandia.inventory.model.Venta;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;

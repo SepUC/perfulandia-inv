@@ -1,4 +1,4 @@
-package com.perfulandia.clientes.model;
+package com.perfulandia.inventory.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

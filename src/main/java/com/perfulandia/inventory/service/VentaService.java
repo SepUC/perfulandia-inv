@@ -1,9 +1,9 @@
-package com.perfulandia.ventas.service;
+package com.perfulandia.inventory.service;
 
 import org.springframework.stereotype.Service;
-import com.perfulandia.ventas.repository.VentasRepository;
+import com.perfulandia.inventory.repository.VentasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.perfulandia.ventas.model.Venta;
+import com.perfulandia.inventory.model.Venta;
 import jakarta.transaction.Transactional;
 
 import java.util.List;

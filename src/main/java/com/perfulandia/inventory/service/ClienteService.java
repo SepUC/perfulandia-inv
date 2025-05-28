@@ -1,7 +1,7 @@
-package com.perfulandia.clientes.service;
+package com.perfulandia.inventory.service;
 
-import com.perfulandia.clientes.model.Cliente;
-import com.perfulandia.clientes.repository.ClienteRepository;
+import com.perfulandia.inventory.model.Cliente;
+import com.perfulandia.inventory.repository.ClienteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

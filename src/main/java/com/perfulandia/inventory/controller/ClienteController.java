@@ -1,7 +1,7 @@
-package com.perfulandia.clientes.controller;
+package com.perfulandia.inventory.controller;
 
-import com.perfulandia.clientes.model.Cliente;
-import com.perfulandia.clientes.service.ClienteService;
+import com.perfulandia.inventory.model.Cliente;
+import com.perfulandia.inventory.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.perfulandia.ventas.model;
+package com.perfulandia.inventory.model;
 
 import jakarta.persistence.*;
 
@@ -32,7 +32,7 @@ public class Venta {
     private String run_cli;
 
     @Column(nullable = false)
-    private Integer id_dist; // Distribuidor asociado a la venta 
+    private Integer id_dist; // Distribuidor asociado a la venta
 
 
 
