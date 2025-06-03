@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/ventas")
+@RequestMapping("api/v1/ventas")
 
 public class VentasController {
 
