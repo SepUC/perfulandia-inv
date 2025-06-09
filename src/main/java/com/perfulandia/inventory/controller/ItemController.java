@@ -1,14 +1,17 @@
 package com.perfulandia.inventory.controller;
 
 
+import com.perfulandia.inventory.Assamblers.ItemModelAssembler;
 import com.perfulandia.inventory.model.Item;
 import com.perfulandia.inventory.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/item")
@@ -18,14 +21,13 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @GetMapping
-    public ResponseEntity<List<Item>> Listar() {
-        List<Item> items = itemService.findAll();
-        if (items.isEmpty()) {
-            return ResponseEntity.noContent().build();
+    @Autowired
+     private ItemModelAssembler itemModelAssembler;
 
-        }
-        return ResponseEntity.ok(items);
+    @GetMapping
+    public List<EntityModel<Item>> Listar() {
+        List<EntityModel<Item>> items = itemService.findAll().stream().map(itemModelAssembler::toModel).collect(Collectors.toList());
+        return items;
     }
 
     @PostMapping
@@ -36,13 +38,10 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Item> buscar(@PathVariable Integer id) {
-        try {
+    public EntityModel<Item> buscar(@PathVariable Integer id) {
+
             Item item = itemService.findById(id);
-            return ResponseEntity.ok(item);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+            return itemModelAssembler.toModel(item);
 
     }
     @PutMapping("/{id}")
