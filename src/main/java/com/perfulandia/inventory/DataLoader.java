@@ -42,7 +42,7 @@ public class DataLoader implements CommandLineRunner {
             clienteRepository.save(cliente);
         }
         //Generar distribuidores
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 2; i++) {
             Distribuidor distribuidor = new Distribuidor();
             distribuidor.setRut(faker.number().numberBetween(700000000, 999999999));
             distribuidor.setDvrut(faker.options().option("1","2","3","4","5","6","7","8","9"));
