@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,28 +26,37 @@ public class ItemController {
      private ItemModelAssembler itemModelAssembler;
 
     @GetMapping
-    public List<EntityModel<Item>> Listar() {
-        List<EntityModel<Item>> items = itemService.findAll().stream().map(itemModelAssembler::toModel).collect(Collectors.toList());
-        return items;
+    public ResponseEntity<List<EntityModel<Item>>> Listar() {
+        List<Item> items = itemService.findAll();
+        if (items.isEmpty()) {
+            return ResponseEntity.noContent().build();
+
+        }
+        List<EntityModel<Item>> itemsHOAS = items.stream().map(itemModelAssembler::toModel).collect(Collectors.toList());
+        return ResponseEntity.ok(itemsHOAS);
     }
 
     @PostMapping
-    public ResponseEntity<Item> guardar(@RequestBody Item item) {
+    public ResponseEntity<EntityModel<Item>> guardar(@RequestBody Item item) {
         Item itemNuevo = itemService.save(item);
-        return ResponseEntity.status(HttpStatus.CREATED).body(itemNuevo);
-    //  return new ResponseEntity<>(itemNuevo, HtppStatus.ACCEPTED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(itemModelAssembler.toModel(itemNuevo));
+
     }
 
     @GetMapping("/{id}")
-    public EntityModel<Item> buscar(@PathVariable Integer id) {
+    public ResponseEntity<EntityModel<Item>>buscar(@PathVariable Integer id) {
 
+        try {
             Item item = itemService.findById(id);
-            return itemModelAssembler.toModel(item);
+            return ResponseEntity.ok(itemModelAssembler.toModel(item));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
 
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Item> actualizar(@PathVariable Integer id, @RequestBody Item item) {
-        try{
+    public ResponseEntity<EntityModel<Item>> actualizar(@PathVariable Integer id, @RequestBody Item item) {
+       try{
             Item it = itemService.findById(id);
             it.setId(id);
             it.setNombre(item.getNombre());
@@ -54,7 +64,7 @@ public class ItemController {
 
 
             itemService.save(it);
-            return ResponseEntity.ok(item);
+            return ResponseEntity.ok(itemModelAssembler.toModel(it));
 
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
