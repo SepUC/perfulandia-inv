@@ -74,7 +74,7 @@ public class ItemController {
     public ResponseEntity<Item> actualizar(@PathVariable Integer id, @RequestBody Item item) {
         try {
             Item it = itemService.findById(id);
-            it.setId(id);
+            it.setId(Long.valueOf(id));
             it.setNombre(item.getNombre());
             it.setPrecio(item.getPrecio());
             itemService.save(it);
