@@ -1,5 +1,7 @@
 package com.perfulandia.inventory.controller;
 
+
+import com.perfulandia.inventory.Assamblers.ItemModelAssembler;
 import com.perfulandia.inventory.model.Item;
 import com.perfulandia.inventory.service.ItemService;
 
@@ -11,11 +13,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/item")
@@ -25,7 +30,11 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
+    @Autowired
+     private ItemModelAssembler itemModelAssembler;
+
     @GetMapping
+    public ResponseEntity<List<EntityModel<Item>>> Listar() {
     @Operation(summary = "Listar todos los ítems", description = "Obtiene una lista de todos los ítems del inventario")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de ítems obtenida exitosamente"),
@@ -36,10 +45,20 @@ public class ItemController {
         if (items.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(items);
+        List<EntityModel<Item>> itemsHOAS = items.stream().map(itemModelAssembler::toModel).collect(Collectors.toList());
+        return ResponseEntity.ok(itemsHOAS);
     }
 
     @PostMapping
+    public ResponseEntity<EntityModel<Item>> guardar(@RequestBody Item item) {
+        Item itemNuevo = itemService.save(item);
+        return ResponseEntity.status(HttpStatus.CREATED).body(itemModelAssembler.toModel(itemNuevo));
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EntityModel<Item>>buscar(@PathVariable Integer id) {
+
     @Operation(summary = "Guardar un ítem", description = "Crea un nuevo ítem en el inventario")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Ítem creado exitosamente"),
@@ -59,13 +78,15 @@ public class ItemController {
     public ResponseEntity<Item> buscar(@PathVariable Integer id) {
         try {
             Item item = itemService.findById(id);
-            return ResponseEntity.ok(item);
+            return ResponseEntity.ok(itemModelAssembler.toModel(item));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PutMapping("/{id}")
+    public ResponseEntity<EntityModel<Item>> actualizar(@PathVariable Integer id, @RequestBody Item item) {
+       try{
     @Operation(summary = "Actualizar un ítem", description = "Actualiza la información de un ítem existente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ítem actualizado exitosamente"),
@@ -78,6 +99,8 @@ public class ItemController {
             it.setNombre(item.getNombre());
             it.setPrecio(item.getPrecio());
             itemService.save(it);
+            return ResponseEntity.ok(itemModelAssembler.toModel(it));
+
             return ResponseEntity.ok(it);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
