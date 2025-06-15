@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//FUSIONARON LOS CODIGOS, AREGGLENLO PLOX!!!
+
 @RestController
 @RequestMapping("/api/v1/item")
 @Tag(name = "Item", description = "Operaciones relacionadas con los ítems del inventario")
@@ -40,14 +42,14 @@ public class ItemController {
                 @ApiResponse(responseCode = "200", description = "Lista de ítems obtenida exitosamente"),
                 @ApiResponse(responseCode = "204", description = "No se encontraron ítems")
         })
-        public ResponseEntity<List<Item>> Listar () {
-            List<Item> items = itemService.findAll();
-            if (items.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            }
-            List<EntityModel<Item>> itemsHOAS = items.stream().map(itemModelAssembler::toModel).collect(Collectors.toList());
-            return ResponseEntity.ok(itemsHOAS);
+
+        List<Item> items = itemService.findAll();
+        if (items.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
+        List<EntityModel<Item>> itemsHOAS = items.stream().map(itemModelAssembler::toModel).collect(Collectors.toList());
+        return ResponseEntity.ok(itemsHOAS);
+    }
 
         @PostMapping
         public ResponseEntity<EntityModel<Item>> guardar (@RequestBody Item item){
@@ -106,22 +108,21 @@ public class ItemController {
                             return ResponseEntity.notFound().build();
                         }
                     }
-
-                    @DeleteMapping("/{id}")
-                    @Operation(summary = "Eliminar un ítem", description = "Elimina un ítem del inventario por su ID")
-                    @ApiResponses(value = {
-                            @ApiResponse(responseCode = "204", description = "Ítem eliminado exitosamente",
-                                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Item.class))),
-                            @ApiResponse(responseCode = "404", description = "Ítem no encontrado")
-                    })
-                    public ResponseEntity<?> eliminar (@PathVariable Long id){
-                        try {
-                            itemService.delete(id);
-                            return ResponseEntity.noContent().build();
-                        } catch (Exception e) {
-                            return ResponseEntity.notFound().build();
-                        }
+             @DeleteMapping("/{id}")
+             @Operation(summary = "Eliminar un ítem", description = "Elimina un ítem del inventario por su ID")
+                @ApiResponses(value = {
+                        @ApiResponse(responseCode = "204", description = "Ítem eliminado exitosamente",
+                                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Item.class))),
+                        @ApiResponse(responseCode = "404", description = "Ítem no encontrado")
+                })
+                public ResponseEntity<?> eliminar (@PathVariable Long id){
+                    try {
+                        itemService.delete(id);
+                        return ResponseEntity.noContent().build();
+                    } catch (Exception e) {
+                        return ResponseEntity.notFound().build();
                     }
+                }
                 }
             }
         }
