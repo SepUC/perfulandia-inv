@@ -17,6 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,10 +68,18 @@ public class ItemController {
             @ApiResponse(responseCode = "200", description = "Ítem encontrado exitosamente"),
             @ApiResponse(responseCode = "404", description = "Ítem no encontrado")
     })
-    public ResponseEntity<EntityModel<Item>> buscar(@PathVariable Integer id) {
+    public ResponseEntity<EntityModel<Item>> buscar(@PathVariable Integer id) { //Experimental testing for multiple CRUDS
         try {
             Item item = itemService.findById(id);
-            return ResponseEntity.ok(itemModelAssembler.toModel(item));
+            EntityModel<Item> model = itemModelAssembler.toModel(item)
+                .add(
+                    linkTo(methodOn(ItemController.class).buscar(id)).withSelfRel(),
+                    linkTo(methodOn(ItemController.class).actualizar(id, item)).withRel("update"),
+                    linkTo(methodOn(ItemController.class).eliminar(Long.valueOf(id))).withRel("delete"),
+                    linkTo(methodOn(ItemController.class).listar()).withRel("all"),
+                    linkTo(methodOn(ItemController.class).guardar(item)).withRel("create")
+                );
+            return ResponseEntity.ok(model);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

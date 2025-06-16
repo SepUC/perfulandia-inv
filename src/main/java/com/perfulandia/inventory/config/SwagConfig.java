@@ -15,6 +15,6 @@ public class SwagConfig {
                 .info(new Info()
                         .title("Perfulandia API")
                         .version("1.0.0")
-                        .description("API para administración y gestión de datos en Perfulandia¿"));
+                        .description("API para administración y gestión de datos en Perfulandia"));
     }
 }
